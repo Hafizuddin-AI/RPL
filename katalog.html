@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head><link rel="stylesheet" href="style.css"><script src="app.js"></script></head>
+<body onload="checkAuth()">
+    <nav></nav>
+    <main>
+        <h2>Katalog Siap Jual</h2>
+        <div id="kt" class="grid-3"></div>
+    </main>
+    <script>
+        kt.innerHTML = db.get("domba").filter(x => x.bobot >= 40).map(x => `
+            <div class="card" style="border:2px solid orange"><h3>${x.id}</h3><p>${x.ras}</p><h3>${x.bobot}kg</h3></div>
+        `).join('');
+    </script>
+</body>
+</html>

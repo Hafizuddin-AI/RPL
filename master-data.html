@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head><link rel="stylesheet" href="style.css"><script src="app.js"></script></head>
+<body onload="checkAuth(); render()">
+    <nav></nav>
+    <main>
+        <h2>Master Data Domba</h2>
+        <div class="card">
+            <h3>Tambah Domba / Indukan</h3>
+            <div class="grid-3">
+                <input id="id" placeholder="ID Domba">
+                <input id="rs" placeholder="Ras/Jenis">
+                <input id="bb" type="number" placeholder="Bobot Awal (kg)">
+                <button onclick="add()">Simpan Data</button>
+            </div>
+        </div>
+        <div class="card">
+            <table><thead><tr><th>ID</th><th>Ras</th><th>Bobot</th><th>Status</th></tr></thead><tbody id="lt"></tbody></table>
+        </div>
+    </main>
+    <script>
+        function add(){
+            let data = db.get("domba");
+            data.push({id:id.value, ras:rs.value, bobot:parseFloat(bb.value), status:bb.value>=40?'Siap Jual':'Ternak'});
+            db.save("domba", data); render();
+        }
+        function render(){
+            lt.innerHTML = db.get("domba").map(x => `<tr><td>${x.id}</td><td>${x.ras}</td><td>${x.bobot}kg</td><td><span class="badge ${x.status==='Siap Jual'?'siap':'ternak'}">${x.status}</span></td></tr>`).join('');
+        }
+    </script>
+</body>
+</html>

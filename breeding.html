@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head><link rel="stylesheet" href="style.css"></head>
+<body onload="checkAuth(); injectMenu(); renderBreeding()">
+    <nav></nav>
+    <main>
+        <h2>Manajemen Breeding & Kelahiran</h2>
+        <div class="card">
+            <input id="induk" placeholder="ID Induk">
+            <input id="pejantan" placeholder="ID Pejantan">
+            <button onclick="mulai()">Mulai Breeding</button>
+        </div>
+        <div class="card">
+            <table id="list">
+                <thead><tr><th>Induk</th><th>Pejantan</th><th>Status</th><th>Aksi</th></tr></thead>
+                <tbody id="breedBody"></tbody>
+            </table>
+        </div>
+    </main>
+    <script src="app.js"></script>
+    <script>
+        function mulai() {
+            let data = db.get("breeding");
+            data.push({ induk: document.getElementById('induk').value, pejantan: document.getElementById('pejantan').value, status: "Proses" });
+            db.save("breeding", data); renderBreeding();
+        }
+        function renderBreeding() {
+            document.getElementById('breedBody').innerHTML = db.get("breeding").map((b, i) => `
+                <tr><td>${b.induk}</td><td>${b.pejantan}</td><td>${b.status}</td>
+                <td>${b.status === 'Proses' ? `<button onclick="lahir(${i})">Lahirkan</button>` : '-'}</td></tr>
+            `).join('');
+        }
+        function lahir(i) {
+            let breed = db.get("breeding");
+            let domba = db.get("domba");
+            breed[i].status = "Selesai";
+            domba.push({ id: "ANAK-"+Math.floor(Math.random()*999), ras: "Crossbreed", bobot: 4, status: "Ternak" });
+            db.save("breeding", breed); db.save("domba", domba); renderBreeding();
+        }
+    </script>
+</body>
+</html>

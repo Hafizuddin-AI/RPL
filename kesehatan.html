@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head><link rel="stylesheet" href="style.css"><script src="app.js"></script></head>
+<body onload="checkAuth()">
+    <nav></nav>
+    <main>
+        <h2>Update Pertumbuhan & Kesehatan</h2>
+        <div class="card" style="max-width:500px;">
+            <input id="idCek" placeholder="Masukkan ID Domba">
+            <input id="bbBaru" type="number" placeholder="Bobot Baru (kg)">
+            <textarea id="not" placeholder="Catatan Medis/Vaksin"></textarea>
+            <button onclick="update()">Update Kondisi</button>
+        </div>
+    </main>
+    <script>
+        function update(){
+            let d = db.get("domba");
+            let target = d.find(x => x.id === idCek.value);
+            if(target) {
+                target.bobot = parseFloat(bbBaru.value);
+                if(target.bobot >= 40) target.status = "Siap Jual";
+                db.save("domba", d); alert("Data diperbarui!");
+            } else { alert("ID tidak ditemukan!"); }
+        }
+    </script>
+</body>
+</html>

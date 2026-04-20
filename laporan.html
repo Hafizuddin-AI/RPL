@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Laporan Inti Peternakan</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body onload="checkAuth(); injectMenu(); renderLaporan()">
+    <nav></nav>
+    <main>
+        <h2>Laporan Inti Peternakan</h2>
+
+        <div class="grid-3">
+            <div class="card" style="border-top: 5px solid green;">
+                <h3>Total Pendapatan</h3>
+                <h2 id="totalOmzet" style="color: green;">Rp 0</h2>
+            </div>
+            <div class="card">
+                <h3>Domba Terjual</h3>
+                <h2 id="countTerjual">0 Ekor</h2>
+            </div>
+            <div class="card">
+                <h3>Populasi Aktif</h3>
+                <h2 id="populasi">0 Ekor</h2>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>Riwayat Penjualan (Domba Keluar)</h3>
+            <table>
+                <thead>
+                    <tr><th>ID</th><th>Jenis</th><th>Tgl Terjual</th><th>Harga Jual</th></tr>
+                </thead>
+                <tbody id="riwayatBody"></tbody>
+            </table>
+        </div>
+    </main>
+
+    <script src="app.js"></script>
+    <script>
+        function renderLaporan() {
+            const riwayat = db.get("riwayat");
+            const domba = db.get("domba");
+            
+            // Hitung Omzet
+            let omzet = riwayat.reduce((sum, item) => sum + parseInt(item.hargaJual), 0);
+            
+            document.getElementById("totalOmzet").innerText = "Rp " + omzet.toLocaleString('id-ID');
+            document.getElementById("countTerjual").innerText = riwayat.length + " Ekor";
+            document.getElementById("populasi").innerText = domba.length + " Ekor";
+
+            document.getElementById("riwayatBody").innerHTML = riwayat.map(r => `
+                <tr>
+                    <td>${r.id}</td>
+                    <td>${r.ras}</td>
+                    <td>${r.tglTerjual}</td>
+                    <td>Rp ${parseInt(r.hargaJual).toLocaleString('id-ID')}</td>
+                </tr>
+            `).join('');
+        }
+    </script>
+</body>
+</html>

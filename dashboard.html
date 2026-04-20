@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head><link rel="stylesheet" href="style.css"><script src="app.js"></script></head>
+<body onload="checkAuth()">
+    <nav></nav>
+    <main>
+        <h2>Dashboard Admin</h2>
+        <div class="grid-3">
+            <div class="card"><h3>Total Populasi</h3><h1 id="p1">0</h1></div>
+            <div class="card"><h3>Domba Siap Jual</h3><h1 id="p2">0</h1></div>
+            <div class="card"><h3>Total Omzet</h3><h2 id="p3">Rp 0</h2></div>
+        </div>
+    </main>
+    <script>
+        const d = db.get("domba");
+        const r = db.get("riwayat");
+        document.getElementById('p1').innerText = d.length + " Ekor";
+        document.getElementById('p2').innerText = d.filter(x => x.bobot >= 40).length + " Ekor";
+        document.getElementById('p3').innerText = "Rp " + r.reduce((s, x) => s + parseInt(x.hargaJual), 0).toLocaleString();
+    </script>
+</body>
+</html>

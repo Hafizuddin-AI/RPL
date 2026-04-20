@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head><link rel="stylesheet" href="style.css"><script src="app.js"></script></head>
+<body onload="checkAuth()">
+    <nav></nav>
+    <main>
+        <h2>Input Penjualan & Pembeli</h2>
+        <div class="card" style="max-width:500px;">
+            <input id="idj" placeholder="ID Domba Terjual">
+            <input id="pembeli" placeholder="Nama Pembeli">
+            <input id="hj" type="number" placeholder="Harga Jual (Rp)">
+            <button onclick="jual()">Konfirmasi Penjualan</button>
+        </div>
+    </main>
+    <script>
+        function jual(){
+            let d = db.get("domba"); let r = db.get("riwayat");
+            let i = d.findIndex(x => x.id === idj.value);
+            if(i > -1) {
+                let sold = d.splice(i, 1)[0];
+                sold.hargaJual = hj.value;
+                sold.pembeli = pembeli.value;
+                sold.tgl = new Date().toLocaleDateString();
+                r.push(sold);
+                db.save("domba", d); db.save("riwayat", r);
+                alert("Penjualan Berhasil!");
+            }
+        }
+    </script>
+</body>
+</html>
